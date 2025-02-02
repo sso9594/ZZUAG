@@ -1,4 +1,0 @@
-cookie:
-    domain: localhost
-    path: /
-    max-age: 86400

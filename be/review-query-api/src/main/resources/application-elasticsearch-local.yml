@@ -1,8 +1,0 @@
-spring:
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
-      url: localhost:9200
-      username: elastic
-      password: MyPw123
