@@ -1,6 +1,6 @@
 package com.zzuag.post_command_service.domain.question.entity;
 
-import com.zzuag.post_command_service.domain.question.dto.request.QuestionLikeCreateRequest;
+import com.zzuag.post_command_service.domain.question.dto.request.QuestionLikeRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,16 +17,16 @@ public class QuestionLikeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
-    private QuestionEntity questionId;
+    private QuestionEntity question;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
     // 해당 메서드를 발급하고 내부 이벤트를 생성해 QuestionEntity에서 likeCount를 증가
-    public static QuestionLikeEntity create(QuestionEntity question, QuestionLikeCreateRequest request) {
+    public static QuestionLikeEntity create(QuestionEntity question, Long userId) {
         return QuestionLikeEntity.builder()
-                .questionId(question)
-                .userId(request.userId())
+                .question(question)
+                .userId(userId)
                 .build();
     }
 }

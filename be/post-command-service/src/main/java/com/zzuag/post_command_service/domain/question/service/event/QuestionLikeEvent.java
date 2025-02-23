@@ -1,4 +1,4 @@
-package com.zzuag.post_command_service.domain.question.event;
+package com.zzuag.post_command_service.domain.question.service.event;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

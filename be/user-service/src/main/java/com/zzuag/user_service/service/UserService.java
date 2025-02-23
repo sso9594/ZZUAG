@@ -1,6 +1,7 @@
 package com.zzuag.user_service.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.zzuag.common_module.passport.Passport;
 import com.zzuag.user_service.dto.request.EditProfileRequest;
 import com.zzuag.user_service.dto.request.SignupRequest;
 import com.zzuag.user_service.dto.response.UserInfoResponse;
@@ -40,22 +41,22 @@ public class UserService {
     }
 
     // todo: common-module에서 aop 완성하고 passport 가져와서 userInfo 채우기
-    public void editProfile(EditProfileRequest request) throws JsonProcessingException {
-        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userInfo.userId())
+    public void editProfile(Passport passport, EditProfileRequest request) throws JsonProcessingException {
+        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(passport.userId())
                 .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
 
         targetUser.updateUserInfo(request.userInfo());
 
     }
 
-    public UserInfoResponse viewUserProfile(String passport) throws JsonProcessingException {
-        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userInfo.userId())
+    public UserInfoResponse viewUserProfile(Passport passport) throws JsonProcessingException {
+        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(passport.userId())
                 .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
         return UserInfoConverter.from(targetUser);
     }
 
-    public void resignUser(String token) throws JsonProcessingException {
-        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userInfo.userId())
+    public void resignUser(Passport passport) throws JsonProcessingException {
+        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(passport.userId())
                 .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
         targetUser.delete();
     }

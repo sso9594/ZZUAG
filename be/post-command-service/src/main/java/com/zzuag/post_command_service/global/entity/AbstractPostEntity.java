@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public abstract class AbstractPostEntity<T> extends BaseEntity implements Likeable {
+public abstract class AbstractPostEntity extends BaseEntity implements Likeable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

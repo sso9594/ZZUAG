@@ -24,6 +24,8 @@ repositories {
 }
 
 dependencies {
+	// common-module
+	implementation project(':common-module')
 	// Spring Boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// Lombok
