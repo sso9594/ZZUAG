@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.recycle'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':zzuag-common')
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+test {
+    useJUnitPlatform()
+}

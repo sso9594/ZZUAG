@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.recycle'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':zzuag-domain:domain-rds')
+
+}
+
+test {
+    useJUnitPlatform()
+}

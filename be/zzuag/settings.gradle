@@ -1,0 +1,13 @@
+rootProject.name = 'zzuag'
+include 'zzuag-external-api'
+include 'zzuag-domain'
+include 'zzuag-common'
+include 'zzuag-batch'
+include 'zzuag-infra'
+include 'zzuag-domain:domain-rds'
+findProject(':zzuag-domain:domain-rds')?.name = 'domain-rds'
+include 'zzuag-domain:domain-redis'
+findProject(':zzuag-domain:domain-redis')?.name = 'domain-redis'
+include 'zzuag-domain:domain-service'
+findProject(':zzuag-domain:domain-service')?.name = 'domain-service'
+
