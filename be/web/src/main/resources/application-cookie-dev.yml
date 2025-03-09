@@ -1,4 +1,0 @@
-cookie:
-  domain: ${COOKIE_DOMAIN}
-  path: ${COOKIE_PATH}
-  max-age: ${COOKIE_MAX_AGE}

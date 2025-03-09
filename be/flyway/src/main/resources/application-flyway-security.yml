@@ -1,7 +1,0 @@
-zzaug:
-  flyway:
-    security:
-      locations: classpath:db/migration/entity/security
-      sql-migration-suffixes: sql
-      baseline-on-migrate: true
-      baseline-version: 0
