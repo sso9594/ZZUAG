@@ -24,9 +24,10 @@ public class QuestionQueryService {
     private final QuestionQueryDomainService questionQueryDomainService;
 
     @Transactional(readOnly = true)
-    public Question getQuestionById(Long questionId) {
-        return questionQueryDomainService.getQuestionById(questionId)
+    public QuestionResponse getQuestionById(Long questionId) {
+        Question result = questionQueryDomainService.getQuestionById(questionId)
                 .orElseThrow(() -> new IllegalArgumentException("Question not found"));
+        return QuestionResponse.convert(result);
     }
 
     @Transactional(readOnly = true)
