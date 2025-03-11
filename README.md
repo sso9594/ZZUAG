@@ -1,11 +1,14 @@
 ![logo](./resources/logo.jpg)
 
-# ZZUAG
+# ZZUAG - [Refactoring]
 
 ----
 
 ## 프로젝트 소개
 ZZUAG은 코드리뷰에 익숙하지 않은 새싹 개발자들을 위한 코드리뷰 플랫폼입니다.
+
+지난 2024 스마일게이트 데브캠프에서 진행된 프로젝트를 리팩토링중에 있습니다.
+
 
 ## Tech Stack
 ***Server***
