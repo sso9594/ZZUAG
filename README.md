@@ -1,43 +1,53 @@
-![Group 174](https://github.com/sgdevcamp2023/recycle/assets/102807742/39e2f2d2-02b5-4da1-bed2-b4ddb3fb8629)
+![logo](./resources/logo.jpg)
 
-# RECYCLE-ZZUAG
+# ZZUAG
 
-## 소개
-마크다운 에디터와 라인코멘트를 통한 가장 쉬운 코드리뷰 공간을 제공합니다
+----
 
-## 기술 스택
+## 프로젝트 소개
+ZZUAG은 코드리뷰에 익숙하지 않은 새싹 개발자들을 위한 코드리뷰 플랫폼입니다.
 
-- FE
-    - React, TypeScript
-    - ReactQuery
-    - Zustand
-    - React-md-editor
-    - styled-components
-- BE
-    - Spring Boot
-    - MySQL
-    - Rabbit MQ
-    - Redis
-    - Elasticsearch
-    - Logstash
-    - Kibana
-    - Flyway
+## Tech Stack
+***Server***
 
-## 핵심 기능 
+<img src="https://img.shields.io/badge/java17-%23ED8B00?style=for-the-badge&logo=java17&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<br>
 
-### 마크다운 에디터를 통한 편리한 코드리뷰 작성하기
+***Database***
 
-[//]: # (img & text)
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"> <img src="https://img.shields.io/badge/elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white">
+<br>
 
-### Drag&Click으로 원하는 부분에 코멘트 남기기
+***Event Broker***
 
-[//]: # (img & text)
+<img src="https://img.shields.io/badge/rabbitmq-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white">
 
-### 링크를 통한 리뷰어 초대하기
+## Architecture
+![architecture](./resources/architecture.png)
 
-[//]: # (img & text)
+## ERD
+![erd](./resources/erd.png)
 
-## Contributors
+## Multi Module Hierarchy
+![multi-module](./resources/multimodule.png)
+
+## 🔑 서비스 주요 기능
+### 1. 라인 리뷰
+   > 특정 코드 줄을 하이라이트하여 직접 피드백을 남길 수 있습니다.
+
+### 2. 코드 블록 리뷰
+   > 코드 블록 단위로 리뷰를 작성하여 전체적인 코드 흐름에 대한 피드백을 제공할 수 있습니다.
+
+### 3. 댓글을 통한 코드 리뷰 토론
+   > 리뷰에 대한 추가 논의를 위해 댓글 기능을 지원합니다.
+
+### 4. 리뷰 검색 기능
+   > 다른 개발자들이 남긴 코드 리뷰를 검색하여 학습 자료로 활용할 수 있습니다.
+
+### 5. 리뷰 링크 공유
+   > 리뷰는 개별 링크를 통해 공유 및 접근이 가능하여 협업을 더욱 쉽게 만듭니다.
+
+## 팀원 소개
 
 |                               김종준(BE)                                |                               김현우(FE)                               |                             신승용(BE)                              | 이규민(FE)                                                               |
 |:--------------------------------------------------------------------:|:-------------------------------------------------------------------:|:----------------------------------------------------------------:|-----------------------------------------------------------------------|
