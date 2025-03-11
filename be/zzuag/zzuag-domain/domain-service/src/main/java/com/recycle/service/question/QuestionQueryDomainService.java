@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class QuestionQueryService {
+public class QuestionQueryDomainService {
     private final QuestionRdsQueryService questionRdsQueryService;
 
     @Transactional(readOnly = true)

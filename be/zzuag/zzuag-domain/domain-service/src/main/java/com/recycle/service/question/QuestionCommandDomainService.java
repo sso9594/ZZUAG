@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class QuestionCommandService {
+public class QuestionCommandDomainService {
     private final QuestionRdsCommandService questionRdsCommandService;
 
     @Transactional

@@ -11,7 +11,7 @@ import com.recycle.domain.question.exception.QuestionErrCode;
 import com.recycle.domain.question.exception.exceptions.NoSuchQuestionException;
 import com.recycle.service.comment.CommentCommandService;
 import com.recycle.service.comment.CommentQueryService;
-import com.recycle.service.question.QuestionQueryService;
+import com.recycle.service.question.QuestionQueryDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,11 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentCommandService commentCommandService;
     private final CommentQueryService commentQueryService;
-    private final QuestionQueryService questionQueryService;
+    private final QuestionQueryDomainService questionQueryDomainService;
 
     @Transactional
     public void createComment(Long userId, Long questionId, CommentCreateRequest request) {
-        Question targetQuestion = questionQueryService.getQuestionById(questionId)
+        Question targetQuestion = questionQueryDomainService.getQuestionById(questionId)
                         .orElseThrow(()-> new NoSuchQuestionException(QuestionErrCode.NO_SUCH_QUESTION));
         Comment comment = Comment.create(targetQuestion, userId, request.content());
         commentCommandService.createComment(comment);
@@ -35,7 +35,7 @@ public class CommentService {
 
     @Transactional
     public void createComment(Long userId, Long questionId, Long commentId, CommentCreateRequest request) {
-        Question targetQuestion = questionQueryService.getQuestionById(questionId)
+        Question targetQuestion = questionQueryDomainService.getQuestionById(questionId)
                 .orElseThrow(()-> new NoSuchQuestionException(QuestionErrCode.NO_SUCH_QUESTION));
         Comment targetComment = commentQueryService.getCommentById(commentId)
                 .orElseThrow(() -> new NoSuchCommentException(CommentErrCode.NO_SUCH_COMMENT));

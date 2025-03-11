@@ -1,7 +1,7 @@
 package com.recycle.api.question.api;
 
-import com.recycle.api.question.dto.QuestionCreateRequest;
-import com.recycle.api.question.dto.QuestionUpdateRequest;
+import com.recycle.api.question.dto.request.QuestionCreateRequest;
+import com.recycle.api.question.dto.request.QuestionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Question", description = "질문 API")
-public interface QuestionApi {
+public interface QuestionCommandApi {
     @Operation(summary = "질문 생성", description = "질문을 생성합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {

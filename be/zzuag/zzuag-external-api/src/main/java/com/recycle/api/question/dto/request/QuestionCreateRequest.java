@@ -1,4 +1,4 @@
-package com.recycle.api.question.dto;
+package com.recycle.api.question.dto.request;
 
 public record QuestionCreateRequest(
         String title,

@@ -8,7 +8,7 @@ import com.recycle.domain.review.entity.Review;
 import com.recycle.domain.review.exception.ReviewErrCode;
 import com.recycle.domain.review.exception.exceptions.InvalidReviewUserException;
 import com.recycle.domain.review.exception.exceptions.NoSuchReviewException;
-import com.recycle.service.question.QuestionQueryService;
+import com.recycle.service.question.QuestionQueryDomainService;
 import com.recycle.service.review.ReviewCommandService;
 import com.recycle.service.review.ReviewQueryService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewCommandService reviewCommandService;
-    private final QuestionQueryService questionQueryService;
+    private final QuestionQueryDomainService questionQueryDomainService;
     private final ReviewQueryService reviewQueryService;
 
     @Transactional
     public void createReview(Long userId, Long questionId, ReviewCreateRequest request) {
-        Question targetQuestion = questionQueryService.getQuestionById(questionId)
+        Question targetQuestion = questionQueryDomainService.getQuestionById(questionId)
                 .orElseThrow(() -> new NoSuchQuestionException(QuestionErrCode.NO_SUCH_QUESTION));
         reviewCommandService.createReview(
                 Review.create(
