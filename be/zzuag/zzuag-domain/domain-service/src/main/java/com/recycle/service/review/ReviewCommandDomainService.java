@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class ReviewCommandService {
+public class ReviewCommandDomainService {
     private final ReviewRdsCommandService reviewRdsCommandService;
 
     @Transactional

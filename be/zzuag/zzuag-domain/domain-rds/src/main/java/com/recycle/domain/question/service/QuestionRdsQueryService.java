@@ -28,5 +28,11 @@ public class QuestionRdsQueryService {
         return questionRepository.getQuestionsByUserIdAndTopLikeCountByPagination(userId, pageable);
     }
 
+    public Page<Question> findUserInterestedQuestions(Long userId, Pageable pageable) {
+        return questionRepository.findUserInterestedQuestions(userId, pageable);
+    }
 
+    public List<Question> getQuestionsByUserId(Long userId) {
+        return questionRepository.findByUserIdAndIsDeletedFalse(userId);
+    }
 }

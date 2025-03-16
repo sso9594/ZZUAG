@@ -2,7 +2,6 @@ package com.recycle.api.question.service;
 
 import com.recycle.api.question.dto.response.QuestionByUserResponse;
 import com.recycle.api.question.dto.response.QuestionResponse;
-import com.recycle.domain.question.dto.QuestionWithReviewLikesByUserDTO;
 import com.recycle.domain.question.entity.Question;
 import com.recycle.service.question.QuestionQueryDomainService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -45,8 +43,24 @@ public class QuestionQueryService {
                 .stream()
                 .map(QuestionByUserResponse::convert)
                 .toList();
-
         return new PageImpl<>(result, pageable, result.size());
     }
 
+    @Transactional(readOnly = true)
+    public Page<QuestionResponse> findUserInterestedQuestions(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<QuestionResponse> result = questionQueryDomainService.findUserInterestedQuestions(userId, pageable)
+                .stream()
+                .map(QuestionResponse::convert)
+                .toList();
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Transactional(readOnly = true)
+    public List<QuestionResponse> getQuestionsByUserId(Long userId) {
+        return questionQueryDomainService.getQuestionsByUserId(userId)
+                .stream()
+                .map(QuestionResponse::convert)
+                .toList();
+    }
 }

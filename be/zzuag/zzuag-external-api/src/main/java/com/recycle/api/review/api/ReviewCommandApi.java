@@ -1,6 +1,6 @@
 package com.recycle.api.review.api;
 
-import com.recycle.api.review.dto.ReviewCreateRequest;
+import com.recycle.api.review.dto.request.ReviewCreateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Review", description = "리뷰 API")
-public interface ReviewApi {
+@Tag(name = "Review Command", description = "리뷰 명령 API")
+public interface ReviewCommandApi {
     @Operation(summary = "리뷰 생성", description = "리뷰를 생성합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {

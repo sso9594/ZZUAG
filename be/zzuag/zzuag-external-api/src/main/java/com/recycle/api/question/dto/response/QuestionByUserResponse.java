@@ -7,9 +7,9 @@ import lombok.Builder;
 public record QuestionByUserResponse(
         Long questionId,
         String content,
-        Long questionLikeCnt,
-        Long totalReviewLikes,
-        Long reviewCount
+        int questionLikeCnt,
+        int totalReviewLikes,
+        int reviewCount
 ) {
     public static QuestionByUserResponse convert(QuestionWithReviewLikesByUserDTO dto) {
         return QuestionByUserResponse.builder()
