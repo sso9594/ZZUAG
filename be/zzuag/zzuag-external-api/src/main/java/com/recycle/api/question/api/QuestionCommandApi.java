@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Question", description = "질문 API")
+@Tag(name = "Question Command", description = "질문 명령 API")
 public interface QuestionCommandApi {
     @Operation(summary = "질문 생성", description = "질문을 생성합니다.")
     @ApiResponses({

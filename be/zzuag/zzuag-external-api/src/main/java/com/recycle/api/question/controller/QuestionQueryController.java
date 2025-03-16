@@ -42,5 +42,18 @@ public class QuestionQueryController implements QuestionQueryApi {
         );
     }
 
+    @GetMapping("/user/{userId}/interested")
+    public ResponseEntity<Page<QuestionResponse>> findUserInterestedQuestions(
+            @PathVariable @Valid Long userId, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(
+                questionQueryUsecase.findUserInterestedQuestions(userId, page, size)
+        );
+    }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<QuestionResponse>> getQuestionsByUserId(@PathVariable @Valid Long userId) {
+        return ResponseEntity.ok(
+                questionQueryUsecase.getQuestionsByUserId(userId)
+        );
+    }
 }

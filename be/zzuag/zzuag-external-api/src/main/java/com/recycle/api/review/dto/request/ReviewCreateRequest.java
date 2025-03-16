@@ -1,4 +1,4 @@
-package com.recycle.api.review.dto;
+package com.recycle.api.review.dto.request;
 
 import com.recycle.domain.review.entity.ReviewPoint;
 import com.recycle.domain.review.entity.ReviewType;

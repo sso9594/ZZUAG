@@ -10,4 +10,6 @@ import java.util.List;
 public interface QuestionCustomRepository {
     List<Question> findQuestionsByTop10Reviewed();
     Page<QuestionWithReviewLikesByUserDTO> getQuestionsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable);
+
+    Page<Question> findUserInterestedQuestions(Long userId, Pageable pageable);
 }

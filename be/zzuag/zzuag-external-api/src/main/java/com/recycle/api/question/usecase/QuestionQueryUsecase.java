@@ -32,4 +32,14 @@ public class QuestionQueryUsecase {
     public Page<QuestionByUserResponse> getQuestionsByUserIdAndTopLikeCountByPagination(Long userId, int page, int size) {
         return questionQueryService.getQuestionsByUserIdAndTopLikeCountByPagination(userId, page, size);
     }
+
+    @Transactional(readOnly = true)
+    public Page<QuestionResponse> findUserInterestedQuestions(Long userId, int page, int size) {
+        return questionQueryService.findUserInterestedQuestions(userId, page, size);
+    }
+
+    @Transactional(readOnly = true)
+    public List<QuestionResponse> getQuestionsByUserId(Long userId) {
+        return questionQueryService.getQuestionsByUserId(userId);
+    }
 }

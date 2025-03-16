@@ -31,4 +31,14 @@ public class QuestionQueryDomainService {
     public Page<QuestionWithReviewLikesByUserDTO> getQuestionsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable) {
         return questionRdsQueryService.getQuestionsByUserIdAndTopLikeCountByPagination(userId, pageable);
     }
+
+    @Transactional(readOnly = true)
+    public Page<Question> findUserInterestedQuestions(Long userId, Pageable pageable) {
+        return questionRdsQueryService.findUserInterestedQuestions(userId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Question> getQuestionsByUserId(Long userId) {
+        return questionRdsQueryService.getQuestionsByUserId(userId);
+    }
 }

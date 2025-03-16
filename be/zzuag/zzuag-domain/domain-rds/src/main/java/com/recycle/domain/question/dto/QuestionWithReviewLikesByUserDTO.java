@@ -2,9 +2,10 @@ package com.recycle.domain.question.dto;
 
 public record QuestionWithReviewLikesByUserDTO(
         Long questionId,
+        String title,
         String content,
-        Long questionLikeCnt,
-        Long totalReviewLikes,
-        Long reviewCount
+        int questionLikeCnt,
+        int totalReviewLikes,
+        int reviewCount
 ) {
 }

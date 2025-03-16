@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Tag(name = "QuestionQueryApi", description = "질문 조회 API")
+@Tag(name = "Question Query", description = "질문 조회 API")
 public interface QuestionQueryApi {
     @Operation(summary = "질문 조회")
     @ApiResponses({
@@ -34,4 +34,17 @@ public interface QuestionQueryApi {
     })
     public ResponseEntity<Page<QuestionByUserResponse>> getQuestionsByUserIdAndTopLikeCountByPagination(
             @PathVariable @Valid Long userId, @RequestParam int page, @RequestParam int size);
+
+    @Operation(summary = "사용자 관심 질문 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    public ResponseEntity<Page<QuestionResponse>> findUserInterestedQuestions(
+            @PathVariable @Valid Long userId, @RequestParam int page, @RequestParam int size);
+
+    @Operation(summary = "사용자별 질문 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    public ResponseEntity<List<QuestionResponse>> getQuestionsByUserId(@PathVariable @Valid Long userId);
 }
