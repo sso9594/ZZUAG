@@ -1,6 +1,6 @@
 package com.recycle.domain.review.service;
 
-import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserDTO;
+import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserRdsDTO;
 import com.recycle.domain.review.dto.TopReviewedDTO;
 import com.recycle.domain.review.entity.Review;
 import com.recycle.domain.review.repository.ReviewRepository;
@@ -34,7 +34,7 @@ public class ReviewRdsQueryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ReviewWithReviewLikesByUserDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable) {
+    public Page<ReviewWithReviewLikesByUserRdsDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable) {
         return reviewRepository.getReviewsByUserIdAndTopLikeCountByPagination(userId, pageable);
     }
 

@@ -12,4 +12,5 @@ public interface QuestionCustomRepository {
     Page<QuestionWithReviewLikesByUserDTO> getQuestionsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable);
 
     Page<Question> findUserInterestedQuestions(Long userId, Pageable pageable);
+    Page<Question> findQuestionsByKeyword(String keyword, Pageable pageable);
 }

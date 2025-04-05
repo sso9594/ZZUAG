@@ -6,7 +6,7 @@ import com.recycle.api.review.dto.response.ReviewResponse;
 import com.recycle.domain.review.entity.Review;
 import com.recycle.domain.review.exception.ReviewErrCode;
 import com.recycle.domain.review.exception.exceptions.NoSuchReviewException;
-import com.recycle.service.review.ReviewQueryDomainService;
+import com.recycle.service.review.service.ReviewQueryDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

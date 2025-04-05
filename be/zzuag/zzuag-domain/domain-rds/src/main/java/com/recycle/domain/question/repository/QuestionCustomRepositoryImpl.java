@@ -103,5 +103,28 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository{
         return new PageImpl<>(questions, pageable, totalCount);
     }
 
+    @Override
+    public Page<Question> findQuestionsByKeyword(String keyword, Pageable pageable) {
+        List<Question> results = queryFactory
+                .select(question)
+                .from(question)
+                .where(question.content.contains(keyword)
+                        .or(question.metaData.title.contains(keyword)))
+                .orderBy(question.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long totalCount = Optional.ofNullable(
+                queryFactory.select(question.count())
+                        .from(question)
+                        .where(question.content.contains(keyword)
+                                .or(question.metaData.title.contains(keyword)))
+                        .fetchOne()
+        ).orElse(0L);
+
+        return new PageImpl<>(results, pageable, totalCount);
+    }
+
 
 }

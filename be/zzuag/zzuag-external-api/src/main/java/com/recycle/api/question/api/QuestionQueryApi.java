@@ -47,4 +47,10 @@ public interface QuestionQueryApi {
             @ApiResponse(responseCode = "200", description = "성공")
     })
     public ResponseEntity<List<QuestionResponse>> getQuestionsByUserId(@PathVariable @Valid Long userId);
+
+    @Operation(summary = "키워드로 질문 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    public ResponseEntity<Page<QuestionResponse>> findQuestionsByKeyword(@RequestParam String keyword, @RequestParam int page, @RequestParam int size);
 }

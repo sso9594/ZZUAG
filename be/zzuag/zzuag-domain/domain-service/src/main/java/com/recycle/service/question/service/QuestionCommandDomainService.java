@@ -1,4 +1,4 @@
-package com.recycle.service.question;
+package com.recycle.service.question.service;
 
 import com.recycle.domain.question.entity.Question;
 import com.recycle.domain.question.service.QuestionRdsCommandService;

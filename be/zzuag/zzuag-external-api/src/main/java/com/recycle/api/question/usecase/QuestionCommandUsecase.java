@@ -15,12 +15,7 @@ public class QuestionCommandUsecase {
     private final QuestionCommandService questionCommandService;
 
     public void createQuestion(Long userId, QuestionCreateRequest request) {
-        questionCommandService.createQuestion(
-                Question.create(
-                        userId,
-                        request.title(),
-                        request.content()
-                ));
+        questionCommandService.createQuestion(userId, request);
     }
 
     public void updateQuestion(Long userId, Long questionId, QuestionUpdateRequest request) {
