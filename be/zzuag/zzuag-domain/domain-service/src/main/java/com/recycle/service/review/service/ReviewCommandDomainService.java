@@ -1,4 +1,4 @@
-package com.recycle.service.review;
+package com.recycle.service.review.service;
 
 import com.recycle.domain.review.entity.Review;
 import com.recycle.domain.review.service.ReviewRdsCommandService;

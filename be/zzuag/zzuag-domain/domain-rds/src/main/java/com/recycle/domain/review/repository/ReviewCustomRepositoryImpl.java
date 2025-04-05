@@ -3,7 +3,7 @@ package com.recycle.domain.review.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserDTO;
+import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserRdsDTO;
 import com.recycle.domain.review.dto.TopReviewedDTO;
 import com.recycle.domain.review.entity.Review;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +50,9 @@ public class ReviewCustomRepositoryImpl implements ReviewCustomRepository{
 
     @Override
     @Description("사용자가 작성한 리뷰 중 좋아요 수가 많은 순으로 리뷰를 조회합니다.")
-    public Page<ReviewWithReviewLikesByUserDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable) {
-        List<ReviewWithReviewLikesByUserDTO> reviews = queryFactory.select(Projections.constructor(
-                        ReviewWithReviewLikesByUserDTO.class,
+    public Page<ReviewWithReviewLikesByUserRdsDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable) {
+        List<ReviewWithReviewLikesByUserRdsDTO> reviews = queryFactory.select(Projections.constructor(
+                        ReviewWithReviewLikesByUserRdsDTO.class,
                         review.id,
                         Expressions.stringTemplate("function('LEFT', {0}, {1})", question.content, 20),
                         review.content,

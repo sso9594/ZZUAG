@@ -1,6 +1,6 @@
 package com.recycle.domain.review.repository;
 
-import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserDTO;
+import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserRdsDTO;
 import com.recycle.domain.review.dto.TopReviewedDTO;
 import com.recycle.domain.review.entity.Review;
 import org.springframework.data.domain.Page;
@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ReviewCustomRepository {
     List<TopReviewedDTO> getTopReviewedDTOs();
-    Page<ReviewWithReviewLikesByUserDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable);
+    Page<ReviewWithReviewLikesByUserRdsDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable);
     Page<Review> findUserInterestedReviews(Long userId, Pageable pageable);
 }

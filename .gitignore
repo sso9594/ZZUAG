@@ -215,7 +215,7 @@ fe/node_modules
 bower_components
 
 *.sublime*
-
+scripts/
 psd
 thumb
 sketch

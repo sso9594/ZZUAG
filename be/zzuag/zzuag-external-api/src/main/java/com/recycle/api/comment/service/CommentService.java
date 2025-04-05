@@ -11,7 +11,7 @@ import com.recycle.domain.question.exception.QuestionErrCode;
 import com.recycle.domain.question.exception.exceptions.NoSuchQuestionException;
 import com.recycle.service.comment.CommentCommandService;
 import com.recycle.service.comment.CommentQueryService;
-import com.recycle.service.question.QuestionQueryDomainService;
+import com.recycle.service.question.service.QuestionQueryDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

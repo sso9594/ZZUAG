@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+server:
+  port: 8082
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

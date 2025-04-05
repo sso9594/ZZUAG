@@ -17,7 +17,7 @@ public abstract class AbstractPostEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     protected String content;
 
     @Column(name = "user_id", nullable = false)

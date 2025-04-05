@@ -1,6 +1,6 @@
 package com.recycle.domain.review.dto;
 
-public record ReviewWithReviewLikesByUserDTO(
+public record ReviewWithReviewLikesByUserRdsDTO(
         Long reviewId,
         String questionPreview,
         String content,

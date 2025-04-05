@@ -56,4 +56,11 @@ public class QuestionQueryController implements QuestionQueryApi {
                 questionQueryUsecase.getQuestionsByUserId(userId)
         );
     }
+
+    @GetMapping("/keyword")
+    public ResponseEntity<Page<QuestionResponse>> findQuestionsByKeyword(@RequestParam String keyword, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(
+                questionQueryUsecase.findQuestionsByKeyword(keyword, page, size)
+        );
+    }
 }

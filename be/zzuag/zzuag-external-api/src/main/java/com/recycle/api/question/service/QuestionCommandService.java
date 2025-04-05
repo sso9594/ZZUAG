@@ -1,12 +1,13 @@
 package com.recycle.api.question.service;
 
+import com.recycle.api.question.dto.request.QuestionCreateRequest;
 import com.recycle.api.question.dto.request.QuestionUpdateRequest;
 import com.recycle.domain.question.entity.Question;
 import com.recycle.domain.question.exception.exceptions.InvalidQuestionUserException;
 import com.recycle.domain.question.exception.exceptions.NoSuchQuestionException;
 import com.recycle.domain.question.exception.QuestionErrCode;
-import com.recycle.service.question.QuestionCommandDomainService;
-import com.recycle.service.question.QuestionQueryDomainService;
+import com.recycle.service.question.service.QuestionCommandDomainService;
+import com.recycle.service.question.service.QuestionQueryDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,14 @@ public class QuestionCommandService {
     private final QuestionQueryDomainService questionQueryDomainService;
 
     @Transactional
-    public void createQuestion(Question question) {
-        questionCommandDomainService.createQuestion(question);
+    public void createQuestion(Long userId, QuestionCreateRequest request) {
+        questionCommandDomainService.createQuestion(
+                Question.create(
+                        userId,
+                        request.title(),
+                        request.content()
+                )
+        );
     }
 
     @Transactional

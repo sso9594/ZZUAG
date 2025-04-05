@@ -42,4 +42,9 @@ public class QuestionQueryUsecase {
     public List<QuestionResponse> getQuestionsByUserId(Long userId) {
         return questionQueryService.getQuestionsByUserId(userId);
     }
+
+    public Page<QuestionResponse> findQuestionsByKeyword(String keyword, int page, int size) {
+//        return questionQueryService.findQuestionsByKeyword(keyword, page, size);
+        return questionQueryService.searchQuestions(keyword, page, size);
+    }
 }

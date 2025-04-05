@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    api project(':zzuag-common')
-    api project(':zzuag-domain:domain-service')
+    implementation project(':zzuag-common')
+    implementation project(':zzuag-domain:domain-service')
     // Spring Boot Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // Validation

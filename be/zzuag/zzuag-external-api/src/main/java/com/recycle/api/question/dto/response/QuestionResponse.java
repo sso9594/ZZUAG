@@ -1,5 +1,7 @@
 package com.recycle.api.question.dto.response;
 
+import com.recycle.domain.question.dto.CachedQuestionResponse;
+import com.recycle.domain.question.dto.QuestionRdsResponse;
 import com.recycle.domain.question.entity.Question;
 import lombok.Builder;
 
@@ -26,6 +28,32 @@ public record QuestionResponse(
                 .reviewCount(question.getMetaData().getReviewCount())
                 .createdAt(question.getCreatedAt())
                 .updatedAt(question.getUpdatedAt())
+                .build();
+    }
+
+    public static QuestionResponse fromCached(CachedQuestionResponse dto) {
+        return QuestionResponse.builder()
+                .questionId(dto.questionId())
+                .title(dto.title())
+                .content(dto.content())
+                .userId(dto.userId())
+                .likeCount(dto.likeCount())
+                .reviewCount(dto.reviewCount())
+                .createdAt(dto.createdAt())
+                .updatedAt(dto.updatedAt())
+                .build();
+    }
+
+    public static QuestionResponse fromRds(QuestionRdsResponse dto) {
+        return QuestionResponse.builder()
+                .questionId(dto.questionId())
+                .title(dto.title())
+                .content(dto.content())
+                .userId(dto.userId())
+                .likeCount(dto.likeCount())
+                .reviewCount(dto.reviewCount())
+                .createdAt(dto.createdAt())
+                .updatedAt(dto.updatedAt())
                 .build();
     }
 }

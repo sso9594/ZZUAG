@@ -1,5 +1,6 @@
 package com.recycle.domain.question.service;
 
+import com.recycle.domain.question.dto.QuestionRdsResponse;
 import com.recycle.domain.question.dto.QuestionWithReviewLikesByUserDTO;
 import com.recycle.domain.question.entity.Question;
 import com.recycle.domain.question.repository.QuestionRepository;
@@ -34,5 +35,20 @@ public class QuestionRdsQueryService {
 
     public List<Question> getQuestionsByUserId(Long userId) {
         return questionRepository.findByUserIdAndIsDeletedFalse(userId);
+    }
+
+    public Page<QuestionRdsResponse> findQuestionsByKeyword(String keyword, Pageable pageable) {
+        Page<Question> result = questionRepository.findQuestionsByKeyword(keyword, pageable);
+        return result.map(question -> QuestionRdsResponse.builder()
+                .questionId(question.getId())
+                .title(question.getMetaData().getTitle())
+                .content(question.getContent())
+                .userId(question.getUserId())
+                .likeCount(question.getLikeCount())
+                .reviewCount(question.getMetaData().getReviewCount())
+                .createdAt(question.getCreatedAt())
+                .updatedAt(question.getUpdatedAt())
+                .build(
+        ));
     }
 }
