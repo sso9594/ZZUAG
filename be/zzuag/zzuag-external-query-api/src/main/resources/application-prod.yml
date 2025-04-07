@@ -1,11 +1,11 @@
 spring:
   application:
-    name: command-api
+    name: query-api
   config:
     activate:
       on-profile: prod
 server:
-  port: 8082
+  port: 8084
 logging:
   level:
     org:

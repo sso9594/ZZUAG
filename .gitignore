@@ -213,7 +213,7 @@ logs
 
 fe/node_modules
 bower_components
-
+Dockerfiles/
 *.sublime*
 scripts/
 psd

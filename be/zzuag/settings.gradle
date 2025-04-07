@@ -10,4 +10,7 @@ include 'zzuag-domain:domain-redis'
 findProject(':zzuag-domain:domain-redis')?.name = 'domain-redis'
 include 'zzuag-domain:domain-service'
 findProject(':zzuag-domain:domain-service')?.name = 'domain-service'
+include 'zzuag-gateway'
+include 'zzuag-eureka'
+include 'zzuag-external-query-api'
 

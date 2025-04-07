@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  zzuag-app:
-    image: sso9594/zzuag
-    container_name: zzuag-app
+  zzuag-command-api:
+    image: sso9594/zzuag-comand-api:latest
+    container_name: zzuag-command-api
     build:
-      context: .
+      context: ./zzuag-command-api
       dockerfile: Dockerfile  # assuming your Dockerfile is in the current directory
     platform: linux/amd64
     ports:
@@ -18,8 +18,10 @@ services:
       DB_PASSWORD: zzuag
       REDIS_HOST: zzuag-redis
       REDIS_PORT: 6379
-      PINPOINT_AGENT_ID: syoung
-      PINPOINT_APPLICATION_NAME: zzuag-Test
+      EUREKA_HOST: zzuag-discovery
+      EUREKA_PORT: 8761
+      PINPOINT_AGENT_ID: command-api
+      PINPOINT_APPLICATION_NAME: zzuag-command-api
       PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config  # Pinpoint config path inside the container
     depends_on:
       - zzuag-mysql
@@ -28,6 +30,141 @@ services:
       - zzuag-network
     volumes:
       - ./pinpoint-agent-3.0.0/:/pinpoint-agent
+
+  zzuag-query-api:
+    image: sso9594/zzuag-query-api:latest
+    container_name: zzuag-query-api
+    build:
+      context: ./zzuag-query-api
+      dockerfile: Dockerfile  # assuming your Dockerfile is in the current directory
+    platform: linux/amd64
+    ports:
+      - "8084:8084"
+    environment:
+      DB_HOST: zzuag-mysql
+      DB_PORT: 3306
+      DB_SOURCE: zzuag
+      DB_USER: zzuag
+      DB_PASSWORD: zzuag
+      REDIS_HOST: zzuag-redis
+      REDIS_PORT: 6379
+      EUREKA_HOST: zzuag-discovery
+      EUREKA_PORT: 8761
+      PINPOINT_AGENT_ID: query-api
+      PINPOINT_APPLICATION_NAME: zzuag-query-api
+      PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config  # Pinpoint config path inside the container
+    depends_on:
+      - zzuag-mysql
+      - zzuag-redis
+    networks:
+      - zzuag-network
+    volumes:
+      - ./pinpoint-agent-3.0.0/:/pinpoint-agent
+
+  zzuag-query-api-1:
+    image: sso9594/zzuag-query-api:latest
+    container_name: zzuag-query-api-1
+    ports:
+      - "8085:8084"
+    environment:
+      DB_HOST: zzuag-mysql
+      DB_PORT: 3306
+      DB_SOURCE: zzuag
+      DB_USER: zzuag
+      DB_PASSWORD: zzuag
+      REDIS_HOST: zzuag-redis
+      REDIS_PORT: 6379
+      EUREKA_HOST: zzuag-discovery
+      EUREKA_PORT: 8761
+      PINPOINT_AGENT_ID: query-api-1
+      PINPOINT_APPLICATION_NAME: zzuag-query-api-1
+      PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config
+    networks:
+      - zzuag-network
+    volumes:
+      - ./pinpoint-agent-3.0.0/:/pinpoint-agent
+
+  zzuag-query-api-2:
+    image: sso9594/zzuag-query-api:latest
+    container_name: zzuag-query-api-2
+    ports:
+      - "8086:8084"  # 내부는 8084로 고정, 외부 포트만 변경
+    environment:
+      DB_HOST: zzuag-mysql
+      DB_PORT: 3306
+      DB_SOURCE: zzuag
+      DB_USER: zzuag
+      DB_PASSWORD: zzuag
+      REDIS_HOST: zzuag-redis
+      REDIS_PORT: 6379
+      EUREKA_HOST: zzuag-discovery
+      EUREKA_PORT: 8761
+      PINPOINT_AGENT_ID: query-api-2
+      PINPOINT_APPLICATION_NAME: zzuag-query-api-2
+      PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config
+    networks:
+      - zzuag-network
+    volumes:
+      - ./pinpoint-agent-3.0.0/:/pinpoint-agent
+
+
+  discovery-service:
+    image: sso9594/zzuag-discovery:latest
+    container_name: zzuag-discovery
+    build:
+      context: ./zzuag-discovery
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_PORT: 8761
+      PINPOINT_AGENT_ID: discovery-service
+      PINPOINT_APPLICATION_NAME: zzuag-discovery-service
+      PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config  # Pinpoint config path inside the container
+    networks:
+      - zzuag-network
+    volumes:
+      - ./pinpoint-agent-3.0.0/:/pinpoint-agent
+
+  gateway:
+    image: sso9594/zzuag-gateway:latest
+    container_name: zzuag-gateway
+    build:
+      context: ./zzuag-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_HOST: zzuag-discovery
+      EUREKA_PORT: 8761
+      PINPOINT_AGENT_ID: gateway
+      PINPOINT_APPLICATION_NAME: zzuag-gateway
+      PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config  # Pinpoint config path inside the container
+    depends_on:
+      - discovery-service
+    networks:
+      - zzuag-network
+    volumes:
+      - ./pinpoint-agent-3.0.0/:/pinpoint-agent
+
+#  query-api:
+#    image: sso9594/zzuag-query-api:latest
+#    container_name: zzuag-query-api
+#    build:
+#      context: ./zzuag-query-api
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      - EUREKA_HOST=zzuag-discovery
+#      - EUREKA_PORT=8761
+#      - REDIS_HOST=zzuag-redis
+#      - REDIS_PORT=6379
+#    depends_on:
+#      - discovery-service
+#      - zzuag-redis
+#    networks:
+#      - zzuag-network
 
   zzuag-mysql:
     image: mysql:latest
@@ -50,15 +187,15 @@ services:
     networks:
       - zzuag-network
 
-  zzuag-adminer:
-    image: adminer:latest
-    container_name: zzuag-adminer
-    environment:
-      ADMINER_DEFAULT_SERVER: zzuag-mysql
-    ports:
-      - "18080:8080"
-    networks:
-      - zzuag-network
+#  zzuag-adminer:
+#    image: adminer:latest
+#    container_name: zzuag-adminer
+#    environment:
+#      ADMINER_DEFAULT_SERVER: zzuag-mysql
+#    ports:
+#      - "18080:8080"
+#    networks:
+#      - zzuag-network
 
   zzuag-redis:
     image: redis:latest
