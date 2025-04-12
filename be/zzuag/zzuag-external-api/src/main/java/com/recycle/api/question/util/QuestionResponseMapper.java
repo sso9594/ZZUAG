@@ -1,10 +1,11 @@
 package com.recycle.api.question.util;
 
+import com.recycle.api.question.dto.response.QuestionResponse;
 import com.recycle.domain.question.dto.CachedQuestionResponse;
 import com.recycle.domain.question.dto.QuestionRdsResponse;
 
 public class QuestionResponseMapper {
-    public static CachedQuestionResponse toCached(QuestionRdsResponse r) {
+    public static CachedQuestionResponse toCached(QuestionResponse r) {
         return CachedQuestionResponse.builder()
                 .questionId(r.questionId())
                 .title(r.title())

@@ -21,6 +21,9 @@ services:
       PINPOINT_AGENT_ID: syoung
       PINPOINT_APPLICATION_NAME: zzuag-Test
       PINPOINT_CONFIG: /pinpoint-agent/pinpoint-root.config  # Pinpoint config path inside the container
+      ES_URL: http://elasticsearch:9200
+      ES_USERNAME: elastic
+      ES_PASSWORD: 959495
     depends_on:
       - zzuag-mysql
       - zzuag-redis
@@ -50,15 +53,15 @@ services:
     networks:
       - zzuag-network
 
-  zzuag-adminer:
-    image: adminer:latest
-    container_name: zzuag-adminer
-    environment:
-      ADMINER_DEFAULT_SERVER: zzuag-mysql
-    ports:
-      - "18080:8080"
-    networks:
-      - zzuag-network
+#  zzuag-adminer:
+#    image: adminer:latest
+#    container_name: zzuag-adminer
+#    environment:
+#      ADMINER_DEFAULT_SERVER: zzuag-mysql
+#    ports:
+#      - "18080:8080"
+#    networks:
+#      - zzuag-network
 
   zzuag-redis:
     image: redis:latest
@@ -68,22 +71,122 @@ services:
     networks:
       - zzuag-network
 
-  controller:
-    image: ngrinder/controller
-    platform: linux/amd64
-    restart: always
-    ports:
-      - "9000:80"
-      - "16001:16001"
-      - "12000-12009:12000-12009"
+#  controller:
+#    image: ngrinder/controller
+#    platform: linux/amd64
+#    restart: always
+#    ports:
+#      - "9000:80"
+#      - "16001:16001"
+#      - "12000-12009:12000-12009"
+#    volumes:
+#      - ./ngrinder-controller:/opt/ngrinder-controller
+#  agent:
+#    image: ngrinder/agent
+#    platform: linux/amd64
+#    restart: always
+#    links:
+#      - controller
+  setup:
+    profiles:
+      - setup
+    build:
+      context: ./docker-elk/setup/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    init: true
     volumes:
-      - ./ngrinder-controller:/opt/ngrinder-controller
-  agent:
-    image: ngrinder/agent
-    platform: linux/amd64
-    restart: always
-    links:
-      - controller
+      - ./docker-elk/setup/entrypoint.sh:/entrypoint.sh:ro,Z
+      - ./docker-elk/setup/lib.sh:/lib.sh:ro,Z
+      - ./docker-elk/setup/roles:/roles:ro,Z
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      METRICBEAT_INTERNAL_PASSWORD: ${METRICBEAT_INTERNAL_PASSWORD:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      HEARTBEAT_INTERNAL_PASSWORD: ${HEARTBEAT_INTERNAL_PASSWORD:-}
+      MONITORING_INTERNAL_PASSWORD: ${MONITORING_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+    networks:
+      - zzuag-network
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    build:
+      context: ./docker-elk/elasticsearch/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./docker-elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./docker-elk/elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # Bootstrap password.
+      # Used to initialize the keystore during the initial startup of
+      # Elasticsearch. Ignored on subsequent runs.
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    command: >
+      bash -c "
+        if [ ! -f /usr/share/elasticsearch/plugins/analysis-nori/plugin-descriptor.properties ]; then
+          bin/elasticsearch-plugin install --batch analysis-nori;
+        fi &&
+        bin/elasticsearch"
+    networks:
+      - zzuag-network
+    restart: unless-stopped
+
+  logstash:
+    build:
+      context: ./docker-elk/logstash/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./docker-elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./docker-elk/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./docker-elk/logstash/mysql-connector-j-8.0.33.jar:/usr/share/logstash/mysql-connector-j-8.0.33.jar:ro,Z
+    ports:
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+    command: ["/usr/share/logstash/logstash-entrypoint.sh"]
+    networks:
+      - zzuag-network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    build:
+      context: ./docker-elk/kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./docker-elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    networks:
+      - zzuag-network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+volumes:
+  elasticsearch:
 
 networks:
   zzuag-network:

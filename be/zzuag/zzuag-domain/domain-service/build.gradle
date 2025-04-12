@@ -15,6 +15,7 @@ repositories {
 dependencies {
     api project(':zzuag-domain:domain-rds')
     api project(':zzuag-domain:domain-redis')
+    api project(':zzuag-domain:domain-es')
 
 }
 

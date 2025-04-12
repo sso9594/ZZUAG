@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionCustomRepository {
+public interface QuestionRdsRepository extends JpaRepository<Question, Long>, QuestionCustomRepository {
     Optional<Question> findByIdAndIsDeletedFalse(Long id);
     List<Question> findByUserIdAndIsDeletedFalse(Long userId);
+
+    List<Question> findByIdInAndIsDeletedFalse(List<Long> questionIds);
 }

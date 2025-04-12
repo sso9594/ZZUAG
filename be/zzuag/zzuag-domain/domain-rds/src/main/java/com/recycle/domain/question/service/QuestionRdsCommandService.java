@@ -1,7 +1,7 @@
 package com.recycle.domain.question.service;
 
 import com.recycle.domain.question.entity.Question;
-import com.recycle.domain.question.repository.QuestionRepository;
+import com.recycle.domain.question.repository.QuestionRdsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,16 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QuestionRdsCommandService {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionRdsRepository questionRdsRepository;
 
     @Transactional
     public void createQuestion(Question question) {
-        questionRepository.save(question);
+        questionRdsRepository.save(question);
     }
 
     @Transactional
     public void updateQuestion(Question question) {
-        questionRepository.save(question);
+        questionRdsRepository.save(question);
     }
 
     @Transactional

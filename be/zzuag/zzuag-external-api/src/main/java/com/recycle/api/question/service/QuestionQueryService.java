@@ -1,5 +1,6 @@
 package com.recycle.api.question.service;
 
+import com.recycle.domain.question.dto.QuestionIdResult;
 import com.recycle.api.question.cache.QuestionSearchCacheFacade;
 import com.recycle.api.question.dto.response.QuestionByUserResponse;
 import com.recycle.api.question.dto.response.QuestionResponse;
@@ -97,7 +98,24 @@ public class QuestionQueryService {
             return new PageImpl<>(responses, pageable, cache.get().getTotalElements());
         }
 
-        Page<QuestionRdsResponse> result = questionQueryDomainService.findQuestionsFromRds(keyword, pageable);
+        QuestionIdResult questionIdsByKeyword = questionQueryDomainService.findQuestionIdsByKeyword(keyword, pageable);
+
+        Page<QuestionResponse> result = null;
+
+        if (!questionIdsByKeyword.ids().isEmpty()) {
+            List<QuestionRdsResponse> questionRdsResponses = questionQueryDomainService.findQuestionsByIds(questionIdsByKeyword.ids());
+
+            List<QuestionResponse> responses = questionRdsResponses.stream()
+                    .map(QuestionResponse::fromRds)
+                    .toList();
+
+            result = new PageImpl<>(responses, pageable, questionIdsByKeyword.totalCount());
+
+        } else {
+            result = questionQueryDomainService.findQuestionsFromRds(keyword, pageable)
+                    .map(QuestionResponse::fromRds);
+        }
+
 
         List<CachedQuestionResponse> toCache = result.getContent().stream()
                 .map(QuestionResponseMapper::toCached)
@@ -112,7 +130,7 @@ public class QuestionQueryService {
 
         questionQueryDomainService.cachePage(keyword, page, cached);
 
-        return result.map(QuestionResponse::fromRds);
+        return result;
     }
 
 }

@@ -1,0 +1,9 @@
+spring:
+  elasticsearch:
+    uris: ${ES_URL}
+    username: ${ES_USERNAME}
+    password: ${ES_PASSWORD}
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true

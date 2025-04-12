@@ -10,4 +10,6 @@ include 'zzuag-domain:domain-redis'
 findProject(':zzuag-domain:domain-redis')?.name = 'domain-redis'
 include 'zzuag-domain:domain-service'
 findProject(':zzuag-domain:domain-service')?.name = 'domain-service'
+include 'zzuag-domain:domain-es'
+findProject(':zzuag-domain:domain-es')?.name = 'domain-es'
 

@@ -1,5 +1,7 @@
 package com.recycle.service.question.service;
 
+import com.recycle.domain.question.dto.QuestionIdResult;
+import com.recycle.domain.question.service.QuestionEsQueryService;
 import com.recycle.domain.question.dto.CachedQuestionPage;
 import com.recycle.domain.question.dto.CachedQuestionResponse;
 import com.recycle.domain.question.dto.QuestionRdsResponse;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class QuestionQueryDomainService {
     private final QuestionRdsQueryService questionRdsQueryService;
     private final QuestionRedisQueryService questionRedisQueryService;
+    private final QuestionEsQueryService questionEsQueryService;
 
     @Transactional(readOnly = true)
     public Optional<Question> getQuestionById(Long questionId) {
@@ -47,6 +50,16 @@ public class QuestionQueryDomainService {
     @Transactional(readOnly = true)
     public List<Question> getQuestionsByUserId(Long userId) {
         return questionRdsQueryService.getQuestionsByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public QuestionIdResult findQuestionIdsByKeyword(String keyword, Pageable pageable) {
+        return questionEsQueryService.findQuestionsByKeyword(keyword, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<QuestionRdsResponse> findQuestionsByIds(List<Long> questionIds) {
+        return questionRdsQueryService.findQuestionsByIds(questionIds);
     }
 
     public Optional<CachedQuestionPage> getCachedPage(String keyword, int page) {

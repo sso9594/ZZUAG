@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.clubnu'
+version = '0.0.1-SNAPSHOT'
+
+bootJar {enabled = false}
+jar {enabled = true}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':zzuag-common')
+    // Elasticsearch
+    api 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.elasticsearch:elasticsearch:8.17.4'
+}
+
+
+test {
+    useJUnitPlatform()
+}
