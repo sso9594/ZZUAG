@@ -2,11 +2,11 @@ package com.recycle.service.review.service;
 
 import com.recycle.domain.review.dto.CachedReviewLikePage;
 import com.recycle.domain.review.dto.CachedReviewLikesByUser;
+import com.recycle.domain.review.service.ReviewCacheService;
 import com.recycle.domain.review.dto.ReviewWithReviewLikesByUserRdsDTO;
 import com.recycle.domain.review.dto.TopReviewedDTO;
 import com.recycle.domain.review.entity.Review;
 import com.recycle.domain.review.service.ReviewRdsQueryService;
-import com.recycle.domain.review.service.ReviewRedisQueryService;
 import com.recycle.service.review.dto.ReviewWithReviewLikesByUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,13 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-
 @RequiredArgsConstructor
 @Service
 public class ReviewQueryDomainService {
     private final ReviewRdsQueryService reviewRdsQueryService;
-    private final ReviewRedisQueryService reviewRedisQueryService;
+    private final ReviewCacheService reviewCacheService;
 
     @Transactional(readOnly = true)
     public Optional<Review> getReviewById(Long reviewId) {
@@ -34,7 +32,8 @@ public class ReviewQueryDomainService {
     @Transactional(readOnly = true)
     public Page<ReviewWithReviewLikesByUserDTO> getReviewsByUserIdAndTopLikeCountByPagination(Long userId, Pageable pageable) {
         int page = pageable.getPageNumber();
-        Optional<CachedReviewLikePage> cached = reviewRedisQueryService.getCachedReviewPage(userId, page);
+        int size = pageable.getPageSize();
+        Optional<CachedReviewLikePage> cached = reviewCacheService.getCachedReviewPage(userId, page, size);
         if(cached.isPresent()){
             CachedReviewLikePage cachedReviewLikePage = cached.get();
             List<CachedReviewLikesByUser> cachedReviews = cachedReviewLikePage.getContent();
@@ -66,7 +65,7 @@ public class ReviewQueryDomainService {
                 .totalElements(reviews.getTotalElements())
                 .currentPage(reviews.getNumber())
                 .build();
-        reviewRedisQueryService.setCachedReviewPage(userId, page, cachedReviewLikePage);
+        reviewCacheService.setCachedReviewPage(userId, page, size, cachedReviewLikePage);
 
         return reviews.map(review -> ReviewWithReviewLikesByUserDTO.builder()
                 .reviewId(review.reviewId())

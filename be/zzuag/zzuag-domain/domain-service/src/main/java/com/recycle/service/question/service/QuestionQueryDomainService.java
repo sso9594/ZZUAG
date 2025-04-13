@@ -2,11 +2,11 @@ package com.recycle.service.question.service;
 
 import com.recycle.domain.question.dto.CachedQuestionPage;
 import com.recycle.domain.question.dto.CachedQuestionResponse;
+import com.recycle.domain.question.service.QuestionCacheService;
 import com.recycle.domain.question.dto.QuestionRdsResponse;
 import com.recycle.domain.question.dto.QuestionWithReviewLikesByUserDTO;
 import com.recycle.domain.question.entity.Question;
 import com.recycle.domain.question.service.QuestionRdsQueryService;
-import com.recycle.domain.question.service.QuestionRedisQueryService;
 import com.recycle.service.question.dto.QuestionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 public class QuestionQueryDomainService {
     private final QuestionRdsQueryService questionRdsQueryService;
-    private final QuestionRedisQueryService questionRedisQueryService;
+    private final QuestionCacheService questionCacheService;
 
     @Transactional(readOnly = true)
     public Optional<Question> getQuestionById(Long questionId) {
@@ -49,24 +49,25 @@ public class QuestionQueryDomainService {
         return questionRdsQueryService.getQuestionsByUserId(userId);
     }
 
-    public Optional<CachedQuestionPage> getCachedPage(String keyword, int page) {
-        return questionRedisQueryService.getCachedQuestionPage(keyword, page);
+    public Optional<CachedQuestionPage> getCachedPage(String keyword, int page, int size) {
+        return questionCacheService.getCachedQuestionPage(keyword, page, size);
     }
 
     public Page<QuestionRdsResponse> findQuestionsFromRds(String keyword, Pageable pageable) {
         return questionRdsQueryService.findQuestionsByKeyword(keyword, pageable);
     }
 
-    public void cachePage(String keyword, int page, CachedQuestionPage cache) {
-        questionRedisQueryService.setCachedQuestionResponse(keyword, page, cache);
+    public void cachePage(String keyword, int page, int size, CachedQuestionPage cache) {
+        questionCacheService.setCachedQuestionResponse(keyword, page, size, cache);
     }
 
     @Transactional(readOnly = true)
     @Deprecated
     public Page<QuestionResponse> findQuestionsByKeyword(String keyword, Pageable pageable) {
         int page = pageable.getPageNumber();
+        int size = pageable.getPageSize();
 
-        Optional<CachedQuestionPage> cache = questionRedisQueryService.getCachedQuestionPage(keyword, page);
+        Optional<CachedQuestionPage> cache = questionCacheService.getCachedQuestionPage(keyword, page, size);
         if(cache.isPresent()){
             CachedQuestionPage cachedQuestionPage = cache.get();
             List<CachedQuestionResponse> cachedQuestionResponses = cachedQuestionPage.getContent();
@@ -104,7 +105,7 @@ public class QuestionQueryDomainService {
                 .totalElements(result.getTotalElements())
                 .currentPage(result.getNumber())
                 .build();
-        questionRedisQueryService.setCachedQuestionResponse(keyword, page, cachedQuestionPage);
+        questionCacheService.setCachedQuestionResponse(keyword, page, size, cachedQuestionPage);
 
         return result.map(questionRdsResponse -> QuestionResponse.builder()
                 .questionId(questionRdsResponse.questionId())

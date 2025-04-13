@@ -1,12 +1,13 @@
 package com.recycle.api.question.service;
 
+import com.recycle.domain.question.dto.CachedQuestionPage;
+import com.recycle.domain.question.dto.CachedQuestionResponse;
 import com.recycle.api.question.cache.QuestionSearchCacheFacade;
 import com.recycle.api.question.dto.response.QuestionByUserResponse;
 import com.recycle.api.question.dto.response.QuestionResponse;
 import com.recycle.api.question.util.QuestionResponseMapper;
 import com.recycle.common.annotation.LoggingCache;
-import com.recycle.domain.question.dto.CachedQuestionPage;
-import com.recycle.domain.question.dto.CachedQuestionResponse;
+
 import com.recycle.domain.question.dto.QuestionRdsResponse;
 import com.recycle.domain.question.entity.Question;
 import com.recycle.service.question.service.QuestionQueryDomainService;
@@ -87,7 +88,7 @@ public class QuestionQueryService {
     public Page<QuestionResponse> searchQuestions(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        Optional<CachedQuestionPage> cache = questionSearchCacheFacade.findQuestionsByKeyword(keyword, page);
+        Optional<CachedQuestionPage> cache = questionSearchCacheFacade.findQuestionsByKeyword(keyword, page, size);
 
         if (cache.isPresent()) {
             List<QuestionResponse> responses = cache.get().getContent().stream()
@@ -110,7 +111,7 @@ public class QuestionQueryService {
                 .currentPage(result.getNumber())
                 .build();
 
-        questionQueryDomainService.cachePage(keyword, page, cached);
+        questionQueryDomainService.cachePage(keyword, page, size, cached);
 
         return result.map(QuestionResponse::fromRds);
     }
