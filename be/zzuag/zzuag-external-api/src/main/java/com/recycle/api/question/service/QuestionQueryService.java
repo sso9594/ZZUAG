@@ -84,34 +84,42 @@ public class QuestionQueryService {
 //        return new PageImpl<>(result, pageable, result.size());
 //    }
 
+//    @LoggingCache
+//    public Page<QuestionResponse> searchQuestions(String keyword, int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//
+//        Optional<CachedQuestionPage> cache = questionSearchCacheFacade.findQuestionsByKeyword(keyword, page, size);
+//
+//        if (cache.isPresent()) {
+//            List<QuestionResponse> responses = cache.get().getContent().stream()
+//                    .map(QuestionResponse::fromCached)
+//                    .toList();
+//
+//            return new PageImpl<>(responses, pageable, cache.get().getTotalElements());
+//        }
+//
+//        Page<QuestionRdsResponse> result = questionQueryDomainService.findQuestionsFromRds(keyword, pageable);
+//
+//        List<CachedQuestionResponse> toCache = result.getContent().stream()
+//                .map(QuestionResponseMapper::toCached)
+//                .toList();
+//
+//        CachedQuestionPage cached = CachedQuestionPage.builder()
+//                .content(toCache)
+//                .totalPages(result.getTotalPages())
+//                .totalElements(result.getTotalElements())
+//                .currentPage(result.getNumber())
+//                .build();
+//
+//        questionQueryDomainService.cachePage(keyword, page, size, cached);
+//
+//        return result.map(QuestionResponse::fromRds);
+//    }
+
     @LoggingCache
     public Page<QuestionResponse> searchQuestions(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
-        Optional<CachedQuestionPage> cache = questionSearchCacheFacade.findQuestionsByKeyword(keyword, page, size);
-
-        if (cache.isPresent()) {
-            List<QuestionResponse> responses = cache.get().getContent().stream()
-                    .map(QuestionResponse::fromCached)
-                    .toList();
-
-            return new PageImpl<>(responses, pageable, cache.get().getTotalElements());
-        }
-
         Page<QuestionRdsResponse> result = questionQueryDomainService.findQuestionsFromRds(keyword, pageable);
-
-        List<CachedQuestionResponse> toCache = result.getContent().stream()
-                .map(QuestionResponseMapper::toCached)
-                .toList();
-
-        CachedQuestionPage cached = CachedQuestionPage.builder()
-                .content(toCache)
-                .totalPages(result.getTotalPages())
-                .totalElements(result.getTotalElements())
-                .currentPage(result.getNumber())
-                .build();
-
-        questionQueryDomainService.cachePage(keyword, page, size, cached);
 
         return result.map(QuestionResponse::fromRds);
     }

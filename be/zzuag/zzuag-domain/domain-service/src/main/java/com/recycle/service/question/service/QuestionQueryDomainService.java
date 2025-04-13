@@ -9,6 +9,7 @@ import com.recycle.domain.question.entity.Question;
 import com.recycle.domain.question.service.QuestionRdsQueryService;
 import com.recycle.service.question.dto.QuestionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +54,7 @@ public class QuestionQueryDomainService {
         return questionCacheService.getCachedQuestionPage(keyword, page, size);
     }
 
+    @Cacheable(key = "#keyword + ':' + #pageable.pageSize + ':' + #pageable.pageNumber", value = "questionsearch")
     public Page<QuestionRdsResponse> findQuestionsFromRds(String keyword, Pageable pageable) {
         return questionRdsQueryService.findQuestionsByKeyword(keyword, pageable);
     }
