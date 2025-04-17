@@ -2,7 +2,10 @@ package com.recycle.config;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import com.recycle.common.util.Cache;
 import com.recycle.common.util.CacheType;
+import com.recycle.domain.question.dto.CachedQuestionPage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
@@ -17,6 +20,9 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableCaching
 public class CacheConfig {
+
+    @Value("${cache.size}")
+    private static int CACHE_SIZE;
 
     @Bean
     public List<CaffeineCache> caffeineCaches() {
@@ -34,5 +40,10 @@ public class CacheConfig {
         cacheManager.setCaches(caffeineCaches);
 
         return cacheManager;
+    }
+
+    @Bean
+    public Cache<String, CachedQuestionPage> questionCache() {
+        return new Cache<>(CACHE_SIZE);
     }
 }
